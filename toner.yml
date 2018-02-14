@@ -20,17 +20,28 @@ _layer_default:   &layer
 
 _pg_default:      &postgis
   type:           postgis
-  dbname:         '{{PGDATABASE}}'
-  host:           '{{PGHOST}}'
-  user:           '{{PGUSER}}'
-  password:       '{{PGPASSWORD}}'
-  port:           '{{PGPORT}}'
+  dbname:         'gis'
+#  host:           '{{PGHOST}}'
+#  user:           '{{PGUSER}}'
+#  password:       '{{PGPASSWORD}}'
+#  port:           '{{PGPORT}}'
   geometry_field: way
   srid:           3857
   extent:         '-20037508.34,-20037508.34,20037508.34,20037508.34'
   srs:            '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over'
   connect_timeout: 1
   twkb_encoding: true # sets simplify_geometries
+
+bounds: &world
+  - -180
+  - -85.05112877980659
+  - 180
+  - 85.05112877980659
+
+_wgs84_default:   &wgs84
+  extent: *world
+  srs-name: "WGS84"
+  srs: "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 
 
 # == Stylesheets =======================================================
@@ -45,18 +56,19 @@ Stylesheet:
 
 Layer:
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: land-shapes-50m
     id:   land-shapes-50m
     class: shore
     properties:
       maxzoom: 1
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_50m_land
+      type: shape
+      file: data/ne_50m_land/ne_50m_land.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: country-shapes-50m
     id:   country-shapes-50m
     class: shore
@@ -64,11 +76,11 @@ Layer:
       minzoom: 2
       maxzoom: 3
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_50m_admin_0_countries_lakes
+      type: shape
+      file: data/ne_50m_admin_0_countries_lakes/ne_50m_admin_0_countries_lakes.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: country-shapes-10m
     id:   country-shapes-10m
     class: shore
@@ -76,71 +88,54 @@ Layer:
       minzoom: 4
       maxzoom: 7
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_10m_admin_0_countries_lakes
+      type: shape
+      file: data/ne_10m_admin_0_countries_lakes/ne_10m_admin_0_countries_lakes.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: land
     id:   land
     properties:
       minzoom: 8
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: >
-        (
-          SELECT
-            ST_ClipByBox2D(geom, !bbox!) geom
-          FROM land_polygons
-          WHERE geom && !bbox!
-        ) AS _
+      type: shape
+      file: data/land-polygons-split-3857/land_polygons.shp
 
-  - <<: *layer
-    name: nullisland
-    id:   nullisland
-    class: land
-    properties:
-      minzoom: 12
-    Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: nullisland
-
-  - <<: *layer
+  - <<: *wgs84
+    geometry: line
     name: admin0-map-units-10m
     id:   admin0-map-units-10m
     properties:
       minzoom: 4
       maxzoom: 9
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_10m_admin_0_boundary_lines_map_units
+      type: shape
+      file: data/ne_10m_admin_0_boundary_lines_map_units/ne_10m_admin_0_boundary_lines_map_units.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: line
     name: admin1-lines-50m
     id:   admin1-lines-50m
     properties:
       minzoom: 3
       maxzoom: 3
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_50m_admin_1_states_provinces_lines
+      type: shape
+      file: data/ne_50m_admin_1_states_provinces_lines/ne_50m_admin_1_states_provinces_lines.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: line
     name: admin1-lines-10m
     id:   admin1-lines-10m
     properties:
       minzoom: 4
       maxzoom: 9
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_10m_admin_1_states_provinces_lines
+      type: shape
+      file: data/ne_10m_admin_1_states_provinces_lines/ne_10m_admin_1_states_provinces_lines.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: line
     name: ne_50m_admin_0_boundary_lines_land
     id:   ne_50m_admin_0_boundary_lines_land
     class: country-boundary
@@ -148,11 +143,11 @@ Layer:
       minzoom: 2
       maxzoom: 3
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_50m_admin_0_boundary_lines_land
+      type: shape
+      file: data/ne_50m_admin_0_boundary_lines_land/ne_50m_admin_0_boundary_lines_land.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: line
     name: ne_10m_admin_0_boundary_lines_land
     id:   ne_10m_admin_0_boundary_lines_land
     class: country-boundary-10m
@@ -160,11 +155,11 @@ Layer:
       minzoom: 4
       maxzoom: 9
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_10m_admin_0_boundary_lines_land
+      type: shape
+      file: data/ne_10m_admin_0_boundary_lines_land/ne_10m_admin_0_boundary_lines_land.shp
 
   - <<: *layer
+    geometry: line
     name: admin1-lines-osm
     id:   admin1-lines-osm
     properties:
@@ -175,15 +170,16 @@ Layer:
       table: >
         (
           SELECT
-            geometry,
+            way AS geometry,
             name
-          FROM osm_admin
-          WHERE geometry && !bbox!
-            AND type = 'administrative'
-            AND admin_level = 4
+          FROM planet_osm_roads
+          WHERE way && !bbox!
+            AND boundary = 'administrative'
+            AND admin_level = '4'
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: green-areas-high
     id:   green-areas-high
     properties:
@@ -195,14 +191,20 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_green_areas
-          WHERE geometry && !bbox!
+            COALESCE(landuse, "natural", leisure) AS type,
+            way geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              OR leisure IN ('park', 'recreation_ground')
+              OR "natural" IN ('scrub', 'wood', 'grassland')
+            )
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: green-areas-med
     id:   green-areas-med
     properties:
@@ -215,14 +217,20 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_green_areas_z13
-          WHERE geometry && !bbox!
+            COALESCE(landuse, "natural", leisure) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              OR leisure IN ('park', 'recreation_ground')
+              OR "natural" IN ('scrub', 'wood', 'grassland')
+            )
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: green-areas-low
     id:   green-areas-low
     properties:
@@ -235,14 +243,20 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_green_areas_z10
-          WHERE geometry && !bbox!
+            COALESCE(landuse, "natural", leisure) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              OR leisure IN ('park', 'recreation_ground')
+              OR "natural" IN ('scrub', 'wood', 'grassland')
+            )
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: water-bodies-high
     id:   water-bodies-high
     properties:
@@ -254,14 +268,20 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_water_areas
-          WHERE geometry && !bbox!
+            COALESCE("natural", waterway, landuse) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('reservoir')
+              OR "natural" IN ('water', 'river')
+              OR waterway = 'riverbank'
+            )
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: water-bodies-med
     id:   water-bodies-med
     properties:
@@ -274,14 +294,20 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_water_areas_z13
-          WHERE geometry && !bbox!
+            COALESCE("natural", waterway, landuse) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('reservoir')
+              OR "natural" IN ('water', 'river')
+              OR waterway = 'riverbank'
+            )
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: water-bodies-low
     id:   water-bodies-low
     properties:
@@ -294,14 +320,20 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_water_areas_z10
-          WHERE geometry && !bbox!
+            COALESCE("natural", waterway, landuse) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('reservoir')
+              OR "natural" IN ('water', 'river')
+              OR waterway = 'riverbank'
+            )
         ) AS _
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: lakes-50m
     id:   lakes-50m
     class: shore
@@ -309,11 +341,11 @@ Layer:
       minzoom: 3
       maxzoom: 6
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_50m_lakes
+      type: shape
+      file: data/ne_50m_lakes/ne_50m_lakes.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: lakes-10m
     id:   lakes-10m
     class: shore lakes
@@ -321,11 +353,11 @@ Layer:
       minzoom: 7
       maxzoom: 7
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_10m_lakes
+      type: shape
+      file: data/ne_10m_lakes/ne_10m_lakes.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: line
     name: ne-roads
     id:   ne-roads
     properties:
@@ -333,11 +365,11 @@ Layer:
       maxzoom: 8
       cache-features: on
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_10m_roads
+      type: shape
+      file: data/ne_10m_roads/ne_10m_roads.shp
 
   - <<: *layer
+    geometry: line
     name: tunnels
     id:   tunnels
     class: tunnels
@@ -354,6 +386,7 @@ Layer:
         ) AS _
 
   - <<: *layer
+    geometry: line
     name: roads
     id:   roads
     class: roads
@@ -370,6 +403,7 @@ Layer:
         ) AS _
 
   - <<: *layer
+    geometry: line
     name: roads_med
     id:   roads_med
     properties:
@@ -386,6 +420,7 @@ Layer:
         ) AS _
 
   - <<: *layer
+    geometry: line
     name: highways_med
     id:   highways_med
     properties:
@@ -402,6 +437,7 @@ Layer:
         ) AS _
 
   - <<: *layer
+    geometry: line
     name: bridges
     id:   bridges
     class: bridges
@@ -419,6 +455,7 @@ Layer:
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: buildings-high
     id:   buildings-high
     properties:
@@ -431,14 +468,15 @@ Layer:
           SELECT
             osm_id,
             name,
-            type,
-            geometry,
-            area
-          FROM osm_buildings
-          WHERE geometry && !bbox!
+            building AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox! AND building IS NOT NULL AND building != 'no'
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: buildings-med
     id:   buildings-med
     properties:
@@ -450,15 +488,17 @@ Layer:
       table: >
         (
           SELECT
+            osm_id,
             name,
-            type,
-            geometry,
-            area
-          FROM osm_buildings_z13
-          WHERE geometry && !bbox!
+            building AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox! AND building IS NOT NULL AND building != 'no'
         ) AS _
 
   - <<: *layer
+    geometry: line
     name: aeroways
     id:   aeroways
     properties:
@@ -470,244 +510,245 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry
-          FROM osm_aeroways
-          WHERE geometry && !bbox!
+            aeroway AS type,
+            way AS geometry
+          FROM planet_osm_line
+          WHERE way && !bbox! AND aeroway IS NOT NULL
         ) AS _
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_points_z4
     id:   city_points_z4
     properties:
       minzoom: 4
       maxzoom: 4
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_points_z4
+      type: shape
+      file: merged_labels/merged_points_z4.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_points_z5
     id:   city_points_z5
     properties:
       minzoom: 5
       maxzoom: 5
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_points_z5
+      type: shape
+      file: merged_labels/merged_points_z5.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_points_z6
     id:   city_points_z6
     properties:
       minzoom: 6
       maxzoom: 6
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_points_z4
+      type: shape
+      file: merged_labels/merged_points_z4.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_points_z7
     id:   city_points_z7
     properties:
       minzoom: 7
       maxzoom: 7
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_points_z7
+      type: shape
+      file: merged_labels/merged_points_z7.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_points_z8
     id:   city_points_z8
     properties:
       minzoom: 8
       maxzoom: 8
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_points_z8
+      type: shape
+      file: merged_labels/merged_points_z8.shp
 
   - <<: *layer
+    geometry: point
     name: airports
     id:   airports
     properties:
       minzoom: 10
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_10m_airports
+      type: shape
+      file: data/ne_10m_airports/ne_10m_airports.shp
 
 # Start Labels
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: admin0-labels-z3
     id:   admin0-labels-z3
     properties:
       minzoom: 3
       maxzoom: 3
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: admin_0_countries_110m_points
+      type: shape
+      file: shp/labels_admin/admin_0_countries_110m-points.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: admin0-labels-z4
     id:   admin0-labels-z4
     properties:
       minzoom: 4
       maxzoom: 4
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: admin_0_labels_z4
+      type: shape
+      file: shp/labels_admin/admin-0-labels-z4.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: admin0-labels-z5
     id:   admin0-labels-z5
     properties:
       minzoom: 5
       maxzoom: 5
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: admin_0_labels_z5
+      type: shape
+      file: shp/labels_admin/admin-0-labels-z5.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: admin0-labels-z6
     id:   admin0-labels-z6
     properties:
       minzoom: 6
       maxzoom: 6
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: admin_0_labels_z6
+      type: shape
+      file: shp/labels_admin/admin-0-labels-z6.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: admin1-labels-50m-z4
     id:   admin1-labels-50m-z4
     properties:
       minzoom: 4
       maxzoom: 4
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: admin_1_labels_z4
+      type: shape
+      file: shp/labels_admin/admin-1-labels-z4.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: admin1-labels-50m-z5
     id:   admin1-labels-50m-z5
     properties:
       minzoom: 5
       maxzoom: 5
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: admin_1_labels_z5
+      type: shape
+      file: shp/labels_admin/admin-1-labels-z5.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: admin1-labels-50m-z6
     id:   admin1-labels-50m-z6
     properties:
       minzoom: 6
       maxzoom: 6
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: admin_1_labels_z6
+      type: shape
+      file: shp/labels_admin/admin-1-labels-z6.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: admin1-labels-50m-z7
     id:   admin1-labels-50m-z7
     properties:
       minzoom: 7
       maxzoom: 7
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: admin_1_labels_z7
+      type: shape
+      file: shp/labels_admin/admin-1-labels-z7.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_labels_z4
     id:   city_labels_z4
     properties:
       minzoom: 4
       maxzoom: 4
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_labels_z4
+      type: shape
+      file: merged_labels/merged_labels_z4.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_labels_z5
     id:   city_labels_z5
     properties:
       minzoom: 5
       maxzoom: 5
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_labels_z5
+      type: shape
+      file: merged_labels/merged_labels_z5.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_labels_z6
     id:   city_labels_z6
     properties:
       minzoom: 6
       maxzoom: 6
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_labels_z6
+      type: shape
+      file: merged_labels/merged_labels_z6.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_labels_z7
     id:   city_labels_z7
     properties:
       minzoom: 7
       maxzoom: 7
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_labels_z7
+      type: shape
+      file: merged_labels/merged_labels_z7.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_labels_z8
     id:   city_labels_z8
     properties:
       minzoom: 8
       maxzoom: 8
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_labels_z8
+      type: shape
+      file: merged_labels/merged_labels_z8.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_labels_z9
     id:   city_labels_z9
     properties:
       minzoom: 9
       maxzoom: 9
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_points_z9
+      type: shape
+      file: merged_labels/merged_points_z9.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: point
     name: city_labels_z10
     id:   city_labels_z10
     properties:
       minzoom: 10
       maxzoom: 12
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: city_points_z10
+      type: shape
+      file: merged_labels/merged_points_z10.shp
 
   - <<: *layer
+    geometry: polygon
     name: water-bodies-labels-high
     id:   water-bodies-labels-high
     properties:
@@ -719,14 +760,21 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_water_areas
-          WHERE geometry && !bbox!
+            COALESCE("natural", waterway, landuse) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('reservoir')
+              OR "natural" IN ('water', 'river')
+              OR waterway = 'riverbank'
+            )
+            AND name IS NOT NULL
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: water-bodies-labels-med
     id:   water-bodies-labels-med
     properties:
@@ -739,14 +787,21 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_water_areas_z13
-          WHERE geometry && !bbox!
+            COALESCE("natural", waterway, landuse) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('reservoir')
+              OR "natural" IN ('water', 'river')
+              OR waterway = 'riverbank'
+            )
+            AND name IS NOT NULL
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: water-bodies-labels-low
     id:   water-bodies-labels-low
     properties:
@@ -759,47 +814,54 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_water_areas_z10
-          WHERE geometry && !bbox!
+            COALESCE("natural", waterway, landuse) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('reservoir')
+              OR "natural" IN ('water', 'river')
+              OR waterway = 'riverbank'
+            )
+            AND name IS NOT NULL
         ) AS _
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: ne_110m_geography_marine_polys
     id:   ne_110m_geography_marine_polys
     properties:
       minzoom: 2
       maxzoom: 3
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_110m_geography_marine_polys
+      type: shape
+      file: data/ne_110m_geography_marine_polys/ne_110m_geography_marine_polys.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: ne_50m_geography_marine_polys
     id:   ne_50m_geography_marine_polys
     properties:
       minzoom: 4
       maxzoom: 5
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_50m_geography_marine_polys
+      type: shape
+      file: data/ne_50m_geography_marine_polys/ne_50m_geography_marine_polys.shp
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: ne_10m_geography_marine_polys
     id:   ne_10m_geography_marine_polys
     properties:
       minzoom: 6
       maxzoom: 8
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: ne_10m_geography_marine_polys
+      type: shape
+      file: data/ne_10m_geography_marine_polys/ne_10m_geography_marine_polys.shp
 
   - <<: *layer
+    geometry: polygon
     name: green-areas-labels-high
     id:   green-areas-labels-high
     properties:
@@ -811,14 +873,21 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_green_areas
-          WHERE geometry && !bbox!
+            COALESCE(landuse, "natural", leisure) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              OR leisure IN ('park', 'recreation_ground')
+              OR "natural" IN ('scrub', 'wood', 'grassland')
+            )
+            AND name IS NOT NULL
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: green-areas-labels-med
     id:   green-areas-labels-med
     properties:
@@ -831,14 +900,21 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_green_areas_z13
-          WHERE geometry && !bbox!
+            COALESCE(landuse, "natural", leisure) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              OR leisure IN ('park', 'recreation_ground')
+              OR "natural" IN ('scrub', 'wood', 'grassland')
+            )
+            AND name IS NOT NULL
         ) AS _
 
   - <<: *layer
+    geometry: polygon
     name: green-areas-labels-low
     id:   green-areas-labels-low
     properties:
@@ -851,14 +927,21 @@ Layer:
         (
           SELECT
             name,
-            type,
-            geometry,
-            area
-          FROM osm_green_areas_z10
-          WHERE geometry && !bbox!
+            COALESCE(landuse, "natural", leisure) AS type,
+            way AS geometry,
+            way_area AS area
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND (
+              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              OR leisure IN ('park', 'recreation_ground')
+              OR "natural" IN ('scrub', 'wood', 'grassland')
+            )
+            AND name IS NOT NULL
         ) AS _
 
   - <<: *layer
+    geometry: line
     name: major_road_labels
     id:   major_road_labels
     properties:
@@ -867,7 +950,7 @@ Layer:
       <<: *postgis
       geometry_field: geometry
       table: >
-        (SELECT geometry,
+        (SELECT way AS geometry,
             (CASE WHEN highway = 'motorway'
                   THEN ''
                   ELSE name
@@ -881,7 +964,7 @@ Layer:
                   ELSE 0
                   END) AS ref_length,
             highway,
-            ST_Length(geometry) AS length,
+            ST_Length(way) AS length,
             (CASE WHEN highway IN ('motorway', 'motorway_link') THEN 0
                   WHEN highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway') THEN 1
                   WHEN railway IN ('rail', 'spur', 'subway', 'light_rail', 'tram', 'abandoned', 'disused', 'monorail') THEN 2
@@ -894,16 +977,17 @@ Layer:
                   WHEN railway IN ('rail', 'spur', 'subway', 'light_rail', 'tram', 'abandoned', 'disused', 'monorail') THEN 'rail'
                   WHEN highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway') THEN 'path'
                   ELSE '' END) AS kind,
-            (CASE WHEN tunnel = 1 THEN 'yes'
+            (CASE WHEN tunnel IS NOT NULL AND tunnel != 'no' THEN 'yes'
                   ELSE 'no' END) AS is_tunnel,
-            (CASE WHEN bridge = 1 THEN 'yes'
+            (CASE WHEN bridge IS NOT NULL AND bridge != 'no' THEN 'yes'
                   ELSE 'no' END) AS is_bridge
-         FROM osm_roads
+         FROM planet_osm_roads
          WHERE highway IN ('secondary', 'trunk', 'trunk_link', 'primary', 'primary_link', 'motorway', 'motorway_link')
          ORDER BY priority ASC, length DESC)
          AS _
 
   - <<: *layer
+    geometry: line
     name: minor_road_labels
     id:   minor_road_labels
     properties:
@@ -912,32 +996,33 @@ Layer:
       <<: *postgis
       geometry_field: geometry
       table: >
-        (SELECT geometry,
-                name,
-                highway,
-                ST_Length(geometry) AS length,
-                (CASE WHEN highway IN ('motorway', 'motorway_link') THEN 0
-                      WHEN highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway') THEN 1
-                      WHEN railway IN ('rail', 'spur', 'subway', 'light_rail', 'tram', 'abandoned', 'disused', 'monorail') THEN 2
-                      WHEN highway IN ('trunk', 'trunk_link', 'primary', 'primary_link') THEN 3
-                      WHEN highway = 'secondary' THEN 4
-                      WHEN highway = 'tertiary' THEN 5
-                      ELSE 9 END) AS priority,
-                (CASE WHEN highway IN ('secondary', 'trunk', 'trunk_link', 'primary', 'primary_link', 'motorway', 'motorway_link') THEN 'major_road'
-                      WHEN highway IN ('residential', 'unclassified', 'service', 'minor', 'road', 'tertiary') THEN 'minor_road'
-                      WHEN railway IN ('rail', 'spur', 'subway', 'light_rail', 'tram', 'abandoned', 'disused', 'monorail') THEN 'rail'
-                      WHEN highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway') THEN 'path'
-                      ELSE '' END) AS kind,
-                (CASE WHEN tunnel = 1 THEN 'yes'
-                      ELSE 'no' END) AS is_tunnel,
-                (CASE WHEN bridge = 1 THEN 'yes'
-                      ELSE 'no' END) AS is_bridge
-         FROM osm_roads
+        (SELECT way AS geometry,
+            name,
+            highway,
+            ST_Length(way) AS length,
+            (CASE WHEN highway IN ('motorway', 'motorway_link') THEN 0
+                  WHEN highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway') THEN 1
+                  WHEN railway IN ('rail', 'spur', 'subway', 'light_rail', 'tram', 'abandoned', 'disused', 'monorail') THEN 2
+                  WHEN highway IN ('trunk', 'trunk_link', 'primary', 'primary_link') THEN 3
+                  WHEN highway = 'secondary' THEN 4
+                  WHEN highway = 'tertiary' THEN 5
+                  ELSE 9 END) AS priority,
+            (CASE WHEN highway IN ('secondary', 'trunk', 'trunk_link', 'primary', 'primary_link', 'motorway', 'motorway_link') THEN 'major_road'
+                  WHEN highway IN ('residential', 'unclassified', 'service', 'minor', 'road', 'tertiary') THEN 'minor_road'
+                  WHEN railway IN ('rail', 'spur', 'subway', 'light_rail', 'tram', 'abandoned', 'disused', 'monorail') THEN 'rail'
+                  WHEN highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway') THEN 'path'
+                  ELSE '' END) AS kind,
+            (CASE WHEN tunnel IS NOT NULL AND tunnel != 'no' THEN 'yes'
+                  ELSE 'no' END) AS is_tunnel,
+            (CASE WHEN bridge IS NOT NULL AND bridge != 'no' THEN 'yes'
+                  ELSE 'no' END) AS is_bridge
+         FROM planet_osm_line
          WHERE highway IN ('residential', 'unclassified', 'service', 'minor', 'road', 'tertiary')
          ORDER BY priority ASC, length DESC)
          AS _
 
   - <<: *layer
+    geometry: point
     name: poi_station_labels
     id:   poi_station_labels
     properties:
@@ -946,22 +1031,31 @@ Layer:
       <<: *postgis
       geometry_field: geometry
       table: >
-        (SELECT geometry,
+        (SELECT way AS geometry,
                 name,
                 railway,
                 highway,
                 'M' as label
-         FROM osm_stations
-         WHERE railway IN ('station') OR highway IN ('bus_stop'))
-         AS _
+         FROM planet_osm_point
+         WHERE railway IN ('station') OR highway IN ('bus_stop')
+        UNION ALL
+        SELECT way AS geometry,
+               name,
+               railway,
+               NULL AS highway,
+               'M' as label
+        FROM planet_osm_polygon
+        WHERE railway IN ('station')
+        )
+        AS _
 
-  - <<: *layer
+  - <<: *wgs84
+    geometry: polygon
     name: continents
     id:   continents
     properties:
       minzoom: 1
       maxzoom: 2
     Datasource:
-      <<: *postgis
-      geometry_field: geom
-      table: continents
+      type: shape
+      file: shp/continents_900913.shp
