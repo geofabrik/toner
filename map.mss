@@ -802,6 +802,63 @@ Map {
   }
 }
 
+
+#bridges[kind='minor_road']
+{
+  line-color: @color_transport_minor;
+
+  [zoom>=10] {
+    line-width: 0.2;
+  }
+
+  [zoom>=13] {
+    line-width: 0.4;
+  }
+
+  [zoom>=14] {
+    line-width: 0.8;
+  }
+
+  [zoom>=15] {
+    line-width: 1.5;
+  }
+
+  [zoom>=16] {
+    ::casing {
+      line-width: 7;
+    }
+
+    line-width: 4;
+    line-color: @color_transport;
+  }
+
+  [zoom>=17] {
+    ::outline {
+      line-width: 9;
+    }
+
+    line-width: 7;
+  }
+
+  [zoom>=18] {
+    ::outline {
+      line-width: 19;
+      line-color: @color_transport;
+    }
+
+    line-width: 13;
+    line-color: @color_transport_casing;
+  }
+
+  [zoom>=19] {
+    ::outline {
+      line-width: 22;
+    }
+
+    line-width: 16;
+  }
+}
+
 #roads,
 #roads_med,
 #highways_med {
