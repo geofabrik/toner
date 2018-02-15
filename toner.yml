@@ -378,7 +378,7 @@ Layer:
       cache-features: on
     Datasource:
       <<: *postgis
-      geometry_field: geometry
+      geometry_field: way
       table: >
         (
           SELECT *
@@ -395,7 +395,7 @@ Layer:
       cache-features: on
     Datasource:
       <<: *postgis
-      geometry_field: geometry
+      geometry_field: way
       table: >
         (
           SELECT *
@@ -412,7 +412,7 @@ Layer:
       cache-features: on
     Datasource:
       <<: *postgis
-      geometry_field: geometry
+      geometry_field: way
       table: >
         (
           SELECT *
@@ -429,7 +429,7 @@ Layer:
       cache-features: on
     Datasource:
       <<: *postgis
-      geometry_field: geometry
+      geometry_field: way
       table: >
         (
           SELECT *
@@ -447,7 +447,7 @@ Layer:
       group-by: explicit_layer
     Datasource:
       <<: *postgis
-      geometry_field: geometry
+      geometry_field: way
       table: >
         (
           SELECT *
