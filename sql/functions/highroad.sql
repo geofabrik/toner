@@ -23,6 +23,7 @@ CREATE VIEW highroad_z10 AS
                ELSE 99 END) AS priority,
           0 as explicit_layer
       FROM planet_osm_line
+      WHERE highway IN ('motorway', 'trunk', 'primary', 'secondary', 'tertiary')
       ORDER BY z_order ASC, priority DESC);
 
 CREATE VIEW highroad_z11 AS
@@ -43,6 +44,7 @@ CREATE VIEW highroad_z11 AS
                ELSE 99 END) AS priority,
           0 as explicit_layer
       FROM planet_osm_line
+      WHERE highway IN ('motorway', 'trunk', 'primary', 'secondary', 'tertiary')
       ORDER BY z_order ASC, priority DESC);
 
 CREATE VIEW highroad_z12 AS
@@ -65,6 +67,7 @@ CREATE VIEW highroad_z12 AS
                ELSE 99 END) AS priority,
           0 as explicit_layer
       FROM planet_osm_line
+      WHERE highway IN ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link', 'residential', 'unclassified', 'road')
       ORDER BY z_order ASC, priority DESC);
 
 CREATE VIEW highroad_z13 AS
@@ -88,6 +91,7 @@ CREATE VIEW highroad_z13 AS
                ELSE 99 END) AS priority,
           0 as explicit_layer
       FROM planet_osm_line
+      WHERE highway IN ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link', 'residential', 'unclassified', 'road')
       ORDER BY z_order ASC, priority DESC);
 
 CREATE VIEW highroad_z14 AS
@@ -119,6 +123,7 @@ CREATE VIEW highroad_z14 AS
                WHEN railway IN ('rail') THEN 7
                ELSE 99 END) AS priority
       FROM planet_osm_line
+      WHERE highway IN ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link', 'residential', 'unclassified', 'road')
       ORDER BY z_order ASC, priority DESC);
 
 CREATE VIEW highroad_z15plus AS
