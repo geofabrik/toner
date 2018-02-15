@@ -197,9 +197,9 @@ Layer:
           FROM planet_osm_polygon
           WHERE way && !bbox!
             AND (
-              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              landuse IN ('forest', 'village_green')
               OR leisure IN ('park', 'recreation_ground')
-              OR "natural" IN ('scrub', 'wood', 'grassland')
+              OR "natural" IN ('wood')
             )
         ) AS _
 
@@ -223,9 +223,9 @@ Layer:
           FROM planet_osm_polygon
           WHERE way && !bbox!
             AND (
-              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              landuse IN ('forest', 'village_green')
               OR leisure IN ('park', 'recreation_ground')
-              OR "natural" IN ('scrub', 'wood', 'grassland')
+              OR "natural" IN ('wood')
             )
         ) AS _
 
@@ -249,9 +249,9 @@ Layer:
           FROM planet_osm_polygon
           WHERE way && !bbox!
             AND (
-              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              landuse IN ('forest', 'village_green')
               OR leisure IN ('park', 'recreation_ground')
-              OR "natural" IN ('scrub', 'wood', 'grassland')
+              OR "natural" IN ('wood')
             )
         ) AS _
 
@@ -879,9 +879,9 @@ Layer:
           FROM planet_osm_polygon
           WHERE way && !bbox!
             AND (
-              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              landuse IN ('forest', 'village_green')
               OR leisure IN ('park', 'recreation_ground')
-              OR "natural" IN ('scrub', 'wood', 'grassland')
+              OR "natural" IN ('wood')
             )
             AND name IS NOT NULL
         ) AS _
@@ -906,9 +906,9 @@ Layer:
           FROM planet_osm_polygon
           WHERE way && !bbox!
             AND (
-              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              landuse IN ('forest', 'village_green')
               OR leisure IN ('park', 'recreation_ground')
-              OR "natural" IN ('scrub', 'wood', 'grassland')
+              OR "natural" IN ('wood')
             )
             AND name IS NOT NULL
         ) AS _
@@ -933,9 +933,9 @@ Layer:
           FROM planet_osm_polygon
           WHERE way && !bbox!
             AND (
-              landuse IN ('forest', 'grass', 'village_green', 'orchard', 'meadow', 'vineyard')
+              landuse IN ('forest', 'village_green')
               OR leisure IN ('park', 'recreation_ground')
-              OR "natural" IN ('scrub', 'wood', 'grassland')
+              OR "natural" IN ('wood')
             )
             AND name IS NOT NULL
         ) AS _
