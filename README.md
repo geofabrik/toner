@@ -1,9 +1,20 @@
-# Toner for Osm2pgsql Databases
+# Toner for Osm2pgsql Databases – This is a Fork
 
-*This is a fork of the map style "Toner" by Stamen Design. The [original
+This is a fork of the map style "Toner" by Stamen Design. The [original
 style](https://github.com/stamen/toner-carto) expected an Imposm database. This
 fork contains adaptions to be useable with an PostGIS database which was
-imported using Osm2pgsql.*
+imported using Osm2pgsql.
+
+Changes between the original and the fork:
+
+* use Osm2pgsql
+* don't import shapefiles into the database
+* replace
+  [proprietary](https://github.com/github/dmca/blob/master/2014/2014-08-27-Monotype-Imaging.md)
+  Arial font by free Noto font (that's why this is a hard fork with an
+  entirely rewritten Git history)
+
+# Toner
 
 "Toner" is the name of Stamen's black and white map tiles. It was originally
 designed for the Dotspotting project by Geraldine Sarmiento, although many

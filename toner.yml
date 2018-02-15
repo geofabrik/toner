@@ -47,6 +47,7 @@ _wgs84_default:   &wgs84
 # == Stylesheets =======================================================
 
 Stylesheet:
+  - fonts.mss
   - map.mss
   - labels.mss
   - toner.mss

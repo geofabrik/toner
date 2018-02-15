@@ -1,12 +1,12 @@
-@text_font_transport_bold: 'Arial Unicode MS Bold';
-@text_font_physical_bold: 'Arial Unicode MS Bold';
-@text_font_administrative: 'Arial Unicode MS Regular';
-@text_font_administrative_bold: 'Arial Unicode MS Bold';
-@text_font_water: 'Arial Unicode MS Italic';
-@text_font_water_bold: 'Arial Unicode MS Bold Italic';
-@text_font_city: 'Arial Unicode MS Regular';
-@text_font_city_bold: 'Arial Unicode MS Bold';
-@text_font_poi_bold: 'Arial Unicode MS Italic'; // n-dash is broken in Bold Italic
+@text_font_transport_bold: @bold-fonts;
+@text_font_physical_bold: @bold-fonts;
+@text_font_administrative: @book-fonts;
+@text_font_administrative_bold: @bold-fonts;
+@text_font_water: @oblique-fonts;
+@text_font_water_bold: @oblique-fonts;
+@text_font_city: @book-fonts;
+@text_font_city_bold: @bold-fonts;
+@text_font_poi_bold: @oblique-fonts;
 
 @label_color_transport: #000;
 @label_color_transport_halo: #fff;
