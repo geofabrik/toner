@@ -196,7 +196,7 @@ END
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION high_road(scaleDenominator numeric, bbox box3d)
-  RETURNS TABLE(way geometry, highway character varying, railway character varying, kind text, is_link text, is_tunnel text, is_bridge text, explicit_layer integer) AS
+  RETURNS TABLE(way geometry, highway text, railway text, kind text, is_link text, is_tunnel text, is_bridge text, explicit_layer integer) AS
 $$
 DECLARE
   conditions TEXT;
@@ -219,7 +219,7 @@ $$
 LANGUAGE 'plpgsql';
 
 CREATE OR REPLACE FUNCTION high_road(scaleDenominator numeric, bbox box3d, conditions text)
-  RETURNS TABLE(way geometry, highway character varying, railway character varying, kind text, is_link text, is_tunnel text, is_bridge text, explicit_layer integer) AS
+  RETURNS TABLE(way geometry, highway text, railway text, kind text, is_link text, is_tunnel text, is_bridge text, explicit_layer integer) AS
 $$
 DECLARE
   tablename TEXT;
