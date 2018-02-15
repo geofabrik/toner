@@ -228,7 +228,7 @@ Map {
  * Zoom 13 buildings.
  * Already filtered by size upon import.
  */
-#buildings-med[type!='no'] {
+#buildings-med {
   polygon-pattern-file: url("images/stripe_sm.png");
   polygon-pattern-opacity: @pattern_opacity;
   line-width: 0.5;
@@ -239,7 +239,7 @@ Map {
  * Zoom 14+ buildings.
  * Includes all buildings.
  */
-#buildings-high[type!='no'] {
+#buildings-high {
   [zoom=14] {
     [area>=5000] {
       polygon-pattern-file: url("images/stripe_med.png");
