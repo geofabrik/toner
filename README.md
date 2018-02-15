@@ -26,7 +26,7 @@ The original Toner was developed as part of Stamen's
 be found [here](https://github.com/citytracking/toner), for historical
 interest.
 
-![Toner screenshot](raw/master/toner_world.png?raw=true)
+![Toner screenshot](toner_world.png?raw=true)
 
 ## Developing and Deploying
 
