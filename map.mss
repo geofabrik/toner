@@ -225,7 +225,7 @@ Map {
 }
 
 /**
- * Zoom 13 buildings.
+ * Zoom 13+14 buildings.
  * Already filtered by size upon import.
  */
 #buildings-med {
@@ -244,7 +244,7 @@ Map {
 }
 
 /**
- * Zoom 14+ buildings.
+ * Zoom 15+ buildings.
  * Includes all buildings.
  */
 #buildings-high {
@@ -269,20 +269,6 @@ Map {
     polygon-pattern-alignment: global;
     line-width: 0.5;
     line-color: @color_building_outline;
-  }
-
-  // Stamen HQ fancy candycane striping
-  [zoom>=18] {
-    [osm_id=260351411],
-    [osm_id=224030635], // Seth's house
-    [osm_id=248153467], // Sean's house
-    [osm_id=291796473], // Stamen South
-    {
-      polygon-pattern-file: url("images/stripe_color.png");
-      polygon-pattern-opacity: @pattern_opacity;
-      line-width: 1.5;
-      line-color: @color_building_outline_special;
-    }
   }
 }
 
