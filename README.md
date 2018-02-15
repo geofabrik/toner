@@ -14,6 +14,14 @@ Changes between the original and the fork:
   Arial font by free Noto font (that's why this is a hard fork with an
   entirely rewritten Git history)
 
+## Maintained Styls
+
+Some styles in this repository are unmaintained (and broken). The following
+styles are maintained:
+
+* [toner.mml](toner.mml)
+
+
 # Toner
 
 "Toner" is the name of Stamen's black and white map tiles. It was originally
