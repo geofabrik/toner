@@ -229,10 +229,18 @@ Map {
  * Already filtered by size upon import.
  */
 #buildings-med {
-  polygon-pattern-file: url("images/stripe_sm.png");
-  polygon-pattern-opacity: @pattern_opacity;
   line-width: 0.5;
   line-color: @color_building_outline;
+
+  /* Small buildings don't need a fill pattern. */
+  [zoom=13][area>6000] {
+    polygon-pattern-file: url("images/stripe_sm.png");
+    polygon-pattern-opacity: @pattern_opacity;
+  }
+  [zoom=14][area>1500] {
+    polygon-pattern-file: url("images/stripe_sm.png");
+    polygon-pattern-opacity: @pattern_opacity;
+  }
 }
 
 /**
@@ -240,15 +248,6 @@ Map {
  * Includes all buildings.
  */
 #buildings-high {
-  [zoom=14] {
-    [area>=5000] {
-      polygon-pattern-file: url("images/stripe_med.png");
-      polygon-pattern-opacity: @pattern_opacity;
-      line-width: 0.5;
-      line-color: @color_building_outline;
-    }
-  }
-
   /**
    * This is for outlines and no stripe. Catches small buildings.
    * Larger buildings will be overridden with stripes below.

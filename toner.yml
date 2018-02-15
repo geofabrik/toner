@@ -201,6 +201,7 @@ Layer:
               OR leisure IN ('park', 'recreation_ground')
               OR "natural" IN ('wood')
             )
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -226,6 +227,7 @@ Layer:
               landuse IN ('forest', 'village_green')
               OR leisure IN ('park', 'recreation_ground')
               OR "natural" IN ('wood')
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
             )
         ) AS _
 
@@ -253,6 +255,7 @@ Layer:
               OR leisure IN ('park', 'recreation_ground')
               OR "natural" IN ('wood')
             )
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -278,6 +281,7 @@ Layer:
               OR "natural" IN ('water', 'river')
               OR waterway = 'riverbank'
             )
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -304,6 +308,7 @@ Layer:
               OR "natural" IN ('water', 'river')
               OR waterway = 'riverbank'
             )
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -330,6 +335,7 @@ Layer:
               OR "natural" IN ('water', 'river')
               OR waterway = 'riverbank'
             )
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *wgs84
@@ -459,7 +465,7 @@ Layer:
     name: buildings-high
     id:   buildings-high
     properties:
-      minzoom: 14
+      minzoom: 15
     Datasource:
       <<: *postgis
       geometry_field: geometry
@@ -472,7 +478,11 @@ Layer:
             way AS geometry,
             way_area AS area
           FROM planet_osm_polygon
-          WHERE way && !bbox! AND building IS NOT NULL AND building != 'no'
+          WHERE
+            way && !bbox!
+            AND building IS NOT NULL
+            AND building != 'no'
+            AND way_area > 0.1*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -481,7 +491,7 @@ Layer:
     id:   buildings-med
     properties:
       minzoom: 13
-      maxzoom: 13
+      maxzoom: 14
     Datasource:
       <<: *postgis
       geometry_field: geometry
@@ -494,7 +504,11 @@ Layer:
             way AS geometry,
             way_area AS area
           FROM planet_osm_polygon
-          WHERE way && !bbox! AND building IS NOT NULL AND building != 'no'
+          WHERE
+            way && !bbox!
+            AND building IS NOT NULL
+            AND building != 'no'
+            AND way_area > 20*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -771,6 +785,7 @@ Layer:
               OR waterway = 'riverbank'
             )
             AND name IS NOT NULL
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -798,6 +813,7 @@ Layer:
               OR waterway = 'riverbank'
             )
             AND name IS NOT NULL
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -825,6 +841,7 @@ Layer:
               OR waterway = 'riverbank'
             )
             AND name IS NOT NULL
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *wgs84
@@ -884,6 +901,7 @@ Layer:
               OR "natural" IN ('wood')
             )
             AND name IS NOT NULL
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -911,6 +929,7 @@ Layer:
               OR "natural" IN ('wood')
             )
             AND name IS NOT NULL
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
@@ -938,6 +957,7 @@ Layer:
               OR "natural" IN ('wood')
             )
             AND name IS NOT NULL
+            AND way_area > 0.01*!pixel_width!::real*!pixel_height!::real
         ) AS _
 
   - <<: *layer
