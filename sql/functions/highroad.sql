@@ -132,7 +132,7 @@ CREATE VIEW highroad_z15plus AS
          railway,
          (CASE WHEN highway IN ('motorway', 'motorway_link') THEN 'highway'
                WHEN highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link') THEN 'major_road'
-               WHEN highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway') THEN 'path'
+               WHEN highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'living_street', 'path', 'cycleway') THEN 'path'
                WHEN railway IN ('rail', 'tram', 'light_rail', 'narrow_gauge', 'monorail') THEN 'rail'
                ELSE 'minor_road' END) AS kind,
          (CASE WHEN highway IN ('motorway_link','trunk_link','primary_link','secondary_link','tertiary_link') THEN 'yes'
@@ -164,7 +164,7 @@ CREATE VIEW highroad_z15plus AS
       WHERE highway IN ('motorway', 'motorway_link')
          OR highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link')
          OR highway IN ('residential', 'unclassified', 'road', 'unclassified', 'service', 'minor')
-         OR highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
+         OR highway IN ('footpath', 'track', 'footway', 'steps', 'pedestrian', 'living_street', 'path', 'cycleway')
          OR railway IN ('rail', 'tram', 'light_rail', 'narrow_gauge', 'monorail')
       ORDER BY explicit_layer ASC, implied_layer ASC, priority DESC);
 
