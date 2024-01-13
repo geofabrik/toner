@@ -138,11 +138,11 @@ Map {
     line-opacity: 0.5;
     line-width: 0;
 
-    [zoom=7][SCALERANK<=7] {
+    [zoom=7][scalerank<=7] {
       line-width: 2.25;
     }
 
-    [zoom=8][SCALERANK<=8] {
+    [zoom=8][scalerank<=8] {
       line-width: 3.25;
     }
   }
@@ -150,31 +150,31 @@ Map {
   line-color: @color_transport;
   line-width: 0;
 
-  [zoom=6][SCALERANK>=3][SCALERANK<=6] {
+  [zoom=6][scalerank>=3][scalerank<=6] {
     line-width: 0.1;
   }
 
   [zoom=7] {
-    [SCALERANK<=6],
-    [SCALERANK<=7][expressway=1],
-    [SCALERANK<=7][type='Major Highway'],
-    [SCALERANK<=7][type='Secondary Highway'],
+    [scalerank<=6],
+    [scalerank<=7][expressway=1],
+    [scalerank<=7][type='Major Highway'],
+    [scalerank<=7][type='Secondary Highway'],
     {
       line-width: 0.1;
     }
 
-    [SCALERANK>=3][SCALERANK<=5] {
+    [scalerank>=3][scalerank<=5] {
       line-width: 1.5;
     }
   }
 
   [zoom=8] {
-    [SCALERANK<=8] {
+    [scalerank<=8] {
       line-width: 0.1;
     }
 
     [type='Beltway'],
-    [SCALERANK<=8][expressway=1],
+    [scalerank<=8][expressway=1],
     {
       line-width: 1.5;
     }
