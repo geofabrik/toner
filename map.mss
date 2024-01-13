@@ -45,12 +45,12 @@ Map {
   line-color: @color_administrative_lowzoom;
 }
 
-.country-boundary[scalerank<6] {
+.country-boundary[SCALERANK<6] {
   line-color: @color_administrative_dark;
   line-width: 0.5;
 }
 
-.country-boundary-10m[scalerank<6] {
+.country-boundary-10m[SCALERANK<6] {
   ::whiteout {
     [zoom>=7] {
       line-color: @color_administrative_bright;
@@ -80,40 +80,40 @@ Map {
 
 #admin1-lines-10m,
 #admin0-map-units-10m {
-  [zoom>=4][adm0_a3='CAN'],
-  [zoom>=4][adm0_a3='USA'],
-  [zoom>=4][adm0_a3='AUS'] {
+  [zoom>=4][ADM0_A3='CAN'],
+  [zoom>=4][ADM0_A3='USA'],
+  [zoom>=4][ADM0_A3='AUS'] {
     line-width: 0.6;
     line-color: @color_administrative_dark;
   }
 
-  [zoom>=5][scalerank<=2],
-  [zoom>=5][featurecla='Map unit boundary'][adm0_a3='GBR'] {
+  [zoom>=5][SCALERANK<=2],
+  [zoom>=5][FEATURECLA='Map unit boundary'][ADM0_A3='GBR'] {
     line-width: 0.6;
     line-color: @color_administrative_dark;
   }
 
-  [zoom>=6][scalerank<=4],
-  [zoom>=6][featurecla='Map unit boundary'][adm0_a3='GBR'] {
+  [zoom>=6][SCALERANK<=4],
+  [zoom>=6][FEATURECLA='Map unit boundary'][ADM0_A3='GBR'] {
     line-width: 0.8;
     line-color: @color_administrative_dark;
   }
 
-  [zoom>=7][scalerank<=5] {
+  [zoom>=7][SCALERANK<=5] {
     line-width: 1;
     line-color: @color_administrative_medium_low;
     line-dasharray: 1,5;
     line-cap: round;
   }
 
-  [zoom>=8][scalerank<=6] {
+  [zoom>=8][SCALERANK<=6] {
     line-width: 1.2;
     line-color: @color_administrative_medium_high;
     line-dasharray: 1,5;
     line-cap: round;
   }
 
-  [zoom>=9][scalerank<=8] {
+  [zoom>=9][SCALERANK<=8] {
     line-width: 1.2;
     line-color: @color_administrative_medium_high2;
     line-dasharray: 1,5;
@@ -121,10 +121,10 @@ Map {
   }
 }
 
-#lakes-50m[zoom<3][scalerank<1],
-#lakes-50m[zoom=3][scalerank<2],
-#lakes-50m[zoom=4][scalerank<3],
-#lakes-50m[zoom=5][scalerank<5],
+#lakes-50m[zoom<3][SCALERANK<1],
+#lakes-50m[zoom=3][SCALERANK<2],
+#lakes-50m[zoom=4][SCALERANK<3],
+#lakes-50m[zoom=5][SCALERANK<5],
 #lakes-50m[zoom=6],
 #lakes-10m,
 {
@@ -138,11 +138,11 @@ Map {
     line-opacity: 0.5;
     line-width: 0;
 
-    [zoom=7][scalerank<=7] {
+    [zoom=7][SCALERANK<=7] {
       line-width: 2.25;
     }
 
-    [zoom=8][scalerank<=8] {
+    [zoom=8][SCALERANK<=8] {
       line-width: 3.25;
     }
   }
@@ -150,31 +150,31 @@ Map {
   line-color: @color_transport;
   line-width: 0;
 
-  [zoom=6][scalerank>=3][scalerank<=6] {
+  [zoom=6][SCALERANK>=3][SCALERANK<=6] {
     line-width: 0.1;
   }
 
   [zoom=7] {
-    [scalerank<=6],
-    [scalerank<=7][expressway=1],
-    [scalerank<=7][type='Major Highway'],
-    [scalerank<=7][type='Secondary Highway'],
+    [SCALERANK<=6],
+    [SCALERANK<=7][expressway=1],
+    [SCALERANK<=7][type='Major Highway'],
+    [SCALERANK<=7][type='Secondary Highway'],
     {
       line-width: 0.1;
     }
 
-    [scalerank>=3][scalerank<=5] {
+    [SCALERANK>=3][SCALERANK<=5] {
       line-width: 1.5;
     }
   }
 
   [zoom=8] {
-    [scalerank<=8] {
+    [SCALERANK<=8] {
       line-width: 0.1;
     }
 
     [type='Beltway'],
-    [scalerank<=8][expressway=1],
+    [SCALERANK<=8][expressway=1],
     {
       line-width: 1.5;
     }
